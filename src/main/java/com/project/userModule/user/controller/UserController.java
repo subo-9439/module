@@ -1,7 +1,8 @@
 package com.project.userModule.user.controller;
 
-
+import com.project.userModule.gmail.EmailSenderService;
 import com.project.userModule.sms.SmsService;
+import com.project.userModule.user.dto.AuthDto;
 import com.project.userModule.user.dto.UserRequestDto;
 import com.project.userModule.user.dto.UserResponseDto;
 import com.project.userModule.user.entity.Users;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -25,11 +25,27 @@ public class UserController {
     private final UserService userService;
     private final SmsService smsService;
     private final UserMapper mapper;
+    private final EmailSenderService emailSenderService;
 
-    public UserController(UserService userService, SmsService smsService, UserMapper mapper) {
+    public UserController(UserService userService, SmsService smsService, UserMapper mapper, EmailSenderService emailSenderService) {
         this.userService = userService;
         this.smsService = smsService;
         this.mapper = mapper;
+        this.emailSenderService = emailSenderService;
+    }
+
+    //ajax로
+    @GetMapping("/phone/{phone}/auth")
+    public ResponseEntity phoneAuth(@PathVariable String phone) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+        String certificationNumber = smsService.certificateAndSend(phone);
+        return new ResponseEntity<>(new UserResponseDto<>(new AuthDto("핸드폰으로 인증이 보내졌습니다.",certificationNumber)),HttpStatus.OK);
+    }
+
+    //ajax로
+    @GetMapping("/email/{email}/auth")
+    public ResponseEntity emailAuth(@PathVariable String email) throws InterruptedException {
+        String certificationNumber = emailSenderService.verifyEmail(new String[]{email});
+        return new ResponseEntity<>(new UserResponseDto<>(new AuthDto("메일이 보내졌습니다.", certificationNumber)), HttpStatus.OK);
     }
 
     @PostMapping("/join")
@@ -42,10 +58,4 @@ public class UserController {
         return new ResponseEntity<>(new UserResponseDto<>(user.getName()),HttpStatus.CREATED);
     }
 
-    @GetMapping("/phone/auth/{phone}")
-    public ResponseEntity phoneAuth(@PathVariable String phone) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-        smsService.certificateAndSend(phone);
-        // smsService.send(to,"1234");
-        return new ResponseEntity<>("goog",HttpStatus.OK);
-    }
 }

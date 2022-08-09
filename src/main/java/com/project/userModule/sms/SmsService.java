@@ -1,5 +1,6 @@
 package com.project.userModule.sms;
 
+import com.project.userModule.config.CertificationNumber;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -20,6 +21,7 @@ import java.util.Random;
 
 @Service
 public class SmsService {
+    private final CertificationNumber certificationNumber;
     @Value("${sens.serviceId}")
     private String serviceId;
     @Value("${sens.secretKey}")
@@ -30,6 +32,11 @@ public class SmsService {
     private String from;
 
     private Long time = System.currentTimeMillis();//필수
+
+    public SmsService(CertificationNumber certificationNumber) {
+        this.certificationNumber = certificationNumber;
+    }
+
     public SmsResponseDto send(String to, String content) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         List<SmsMessageDto> smsMessageDtos = new ArrayList<>(){{
             add(new SmsMessageDto(to, content));
@@ -92,18 +99,11 @@ public class SmsService {
         return encodeBase64String;
     }
 
-    public void certificateAndSend(String phone) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+    public String certificateAndSend(String phone) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         String to = phone.strip().replace("-", "");
-        int leftLimit = 48; //0
-        int rightLimit = 122; // z
-        int targetStringLength = 6;
-        Random random = new Random();
-        String generatedString = random.ints(leftLimit,rightLimit+1)
-                .filter(num -> (num <= 57 || num >= 65) && (num <= 90 || num >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new,StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+        String generatedString = CertificationNumber.create();
 
         send(to,"[김수보의 클라우드 플랫폼] 인증번호 ["+ generatedString + "] 를 입력해주세요.");
+        return generatedString;
     }
 }
