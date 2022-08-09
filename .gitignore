@@ -23,6 +23,7 @@ bin/
 ### IntelliJ IDEA ###
 application-naver.yml
 application-gmail.yml
+
 .idea
 *.iws
 *.iml
