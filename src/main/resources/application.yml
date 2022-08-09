@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: naver
   h2:
     console:
       enabled: true
