@@ -2,7 +2,7 @@ spring:
   profiles:
     include:
       - naver
-      - email
+      - gmail
   h2:
     console:
       enabled: true
