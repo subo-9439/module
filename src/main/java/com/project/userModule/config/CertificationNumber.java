@@ -6,7 +6,7 @@ import java.util.Random;
 
 @Component
 public class CertificationNumber {
-
+    //주석
     public static String create(){
         int leftLimit = 48; //0
         int rightLimit = 122; // z
