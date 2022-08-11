@@ -3,19 +3,17 @@ spring:
     include:
       - naver
       - gmail
-  h2:
-    console:
-      enabled: true
-      path: /h2
+      - etc
   datasource:
-    url: jdbc:h2:mem:test
-  jpa:
-    hibernate:
-      ddl-auto: create-drop  # (1) ??? ?? ??
-    show-sql: true      # (2) SQL ?? ??
-    properties:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/swit?serverTimezone=Asia/Seoul
+    username: root
+    password: '@tnqh258'
+    jpa:
       hibernate:
-        format_sql: true  # (3) SQL pretty print
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        ddl-auto: create
+      show-sql: true
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
@@ -26,7 +24,7 @@ logging:
         orm:
           jpa: DEBUG
 server:
-  port: 9090
+  port: 8080
   servlet:
     encoding:
       force-response: true

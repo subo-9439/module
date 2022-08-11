@@ -5,7 +5,7 @@ import com.project.userModule.sms.SmsService;
 import com.project.userModule.user.dto.AuthDto;
 import com.project.userModule.user.dto.UserRequestDto;
 import com.project.userModule.user.dto.UserResponseDto;
-import com.project.userModule.user.entity.Users;
+import com.project.userModule.user.entity.User;
 import com.project.userModule.user.mapper.UserMapper;
 import com.project.userModule.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @Slf4j
 public class UserController {
 
@@ -51,9 +51,9 @@ public class UserController {
     @PostMapping("/join")
     public ResponseEntity joinMember(@RequestBody UserRequestDto.PostJoin requestBody){
         //1. 유저 엔티티로 변환하기
-        Users userEntity = mapper.UserRequestDtoToUserEntity(requestBody);
+        User userEntity = mapper.UserRequestDtoToUserEntity(requestBody);
         //2. 회원가입 진행
-        Users user = userService.joinMember(userEntity);
+        User user = userService.joinMember(userEntity);
         //3 이름과 201 코드 보내기 보내기
         return new ResponseEntity<>(new UserResponseDto<>(user.getName()),HttpStatus.CREATED);
     }

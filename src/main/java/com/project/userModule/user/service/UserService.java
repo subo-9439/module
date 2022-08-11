@@ -1,6 +1,6 @@
 package com.project.userModule.user.service;
 
-import com.project.userModule.user.entity.Users;
+import com.project.userModule.user.entity.User;
 import com.project.userModule.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Users joinMember(Users user){
+    public User joinMember(User user){
         //1.이메일 인증 필요
         authenticateByEmail();
         //2. 핸드폰 인증 필요
