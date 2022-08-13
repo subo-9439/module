@@ -1,4 +1,4 @@
-package com.project.userModule.gmail;
+package com.project.userModule.config.gmail;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;

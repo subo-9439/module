@@ -1,5 +1,6 @@
 package com.project.userModule.config;
 
+import com.project.userModule.config.auth.PrincipalOauth2UserService;
 import com.project.userModule.config.filter.JwtAuthenticationFilter;
 import com.project.userModule.config.filter.JwtAuthorizationFilter;
 import com.project.userModule.user.repository.UserRepository;
@@ -20,7 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
     private final CorsFilter corsFilter;
     private final UserRepository userRepository;
-
+    private final PrincipalOauth2UserService principalOauth2UserService;
     //필터체인이 하나기때문에
     //원할때 바꿔넣으면되지만
     //이미 실행상태에서는 바꿀수가없다 .
@@ -37,9 +38,10 @@ public class SecurityConfig {
 //                .addFilter(corsFilter)//CustomDsl로 옮김
                 .apply(new CustomDsl())//추가
                 .and()
-                .authorizeRequests()
+                .oauth2Login()
+                .userInfoEndpoint() // 추가
+                .userService(principalOauth2UserService);
 //                .antMatchers("/").hasAuthority()
-                .anyRequest().permitAll();
         return http.build();
     }
     /*

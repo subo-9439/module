@@ -1,4 +1,4 @@
-package com.project.userModule.gmail;
+package com.project.userModule.config.gmail;
 
 import org.springframework.stereotype.Component;
 

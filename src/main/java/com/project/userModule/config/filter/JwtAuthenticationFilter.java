@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            log.info("JwetAuthenticationFilter.attemptAuthentication : 로그인시도");
+            log.info("JwtAuthenticationFilter.attemptAuthentication : 로그인시도");
             ObjectMapper objectMapper = new ObjectMapper();
             User user = objectMapper.readValue(request.getInputStream(),User.class);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword());
@@ -60,6 +60,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         .withClaim("id",principalDetails.getUser().getId())
                         .withClaim("email",principalDetails.getUsername())
                         .withClaim("password",principalDetails.getPassword())
+                        .withClaim("nickname",principalDetails.getUser().getNickname())
                         .sign(Algorithm.HMAC512(key));
 
         response.addHeader("Authorization", "Bearer " + jwtToken);

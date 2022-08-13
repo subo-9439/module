@@ -1,6 +1,6 @@
 package com.project.userModule;
 
-import com.project.userModule.gmail.EmailSenderService;
+import com.project.userModule.config.gmail.EmailSenderService;
 import com.project.userModule.sms.SmsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
